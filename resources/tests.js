@@ -16,11 +16,15 @@ Suites.push({
         new BenchmarkTestStep('Adding' + numberOfItemsToAdd + 'Items', function (newTodo, contentWindow, contentDocument) {
             var appView = contentWindow.appView;
             for (var i = 0; i < numberOfItemsToAdd; i++) {
+                var inputEvent = document.createEvent('Event');
+                inputEvent.initEvent('input', true, true);
+                newTodo.value = 'Something to do ' + i;
+                newTodo.dispatchEvent(inputEvent);
+
                 var keypressEvent = document.createEvent('Event');
                 keypressEvent.initEvent('keypress', true, true);
-                keypressEvent.which = 13;
-                newTodo.value = 'Something to do ' + i;
-                newTodo.dispatchEvent(keypressEvent)
+                keypressEvent.which = 13; // VK_ENTER
+                newTodo.dispatchEvent(keypressEvent);
             }
         }),
         new BenchmarkTestStep('CompletingAllItems', function (newTodo, contentWindow, contentDocument) {
@@ -61,10 +65,15 @@ Suites.push({
             for (var i = 0; i < numberOfItemsToAdd; i++) {
                 params.emberRun(function () { params.views["new-todo"].set('value', 'Something to do' + i); });
                 params.emberRun(function () {
+                    var inputEvent = document.createEvent('Event');
+                    inputEvent.initEvent('input', true, true);
+                    params.newTodo.value = 'Something to do ' + i;
+                    params.newTodo.dispatchEvent(inputEvent);
+
                     var keyupEvent = document.createEvent('Event');
                     keyupEvent.initEvent('keyup', true, true);
-                    keyupEvent.keyCode = 13;
-                    params.newTodo.dispatchEvent(keyupEvent)
+                    keyupEvent.keyCode = 13; // VK_ENTER
+                    params.newTodo.dispatchEvent(keyupEvent);
                 });
             }
         }),
@@ -86,7 +95,7 @@ Suites.push({
 Suites.push({
     name: 'Angular',
     url: 'todomvc/angularjs-perf/index.html',
-    version: '1.2.14',
+    version: '1.5.3',
     prepare: function (runner, contentWindow, contentDocument) {
         return runner.waitForElement('#new-todo').then(function (element) {
             element.focus();
@@ -121,10 +130,10 @@ Suites.push({
 Suites.push({
     name: 'React',
     url: 'todomvc/react/index.html',
-    version: '0.10.0',
+    version: '0.14.8',
     prepare: function (runner, contentWindow, contentDocument) {
         contentWindow.Utils.store = function () {}
-        return runner.waitForElement('#new-todo').then(function (element) {
+        return runner.waitForElement('.new-todo').then(function (element) {
             element.focus();
             return element;
         });
@@ -132,10 +141,14 @@ Suites.push({
     tests: [
         new BenchmarkTestStep('Adding' + numberOfItemsToAdd + 'Items', function (newTodo, contentWindow, contentDocument) {
             for (var i = 0; i < numberOfItemsToAdd; i++) {
+                var inputEvent = document.createEvent('Event');
+                inputEvent.initEvent('input', true, true);
+                newTodo.value = 'Something to do ' + i;
+                newTodo.dispatchEvent(inputEvent);
+
                 var keydownEvent = document.createEvent('Event');
                 keydownEvent.initEvent('keydown', true, true);
-                keydownEvent.which = 13; // VK_ENTER
-                newTodo.value = 'Something to do ' + i;
+                keydownEvent.keyCode = 13; // VK_ENTER
                 newTodo.dispatchEvent(keydownEvent);
             }
         }),
@@ -166,10 +179,14 @@ Suites.push({
         new BenchmarkTestStep('Adding' + numberOfItemsToAdd + 'Items', function (newTodo, contentWindow, contentDocument) {
             var todomvc = contentWindow.todomvc;
             for (var i = 0; i < numberOfItemsToAdd; i++) {
+                var inputEvent = document.createEvent('Event');
+                inputEvent.initEvent('input', true, true);
+                newTodo.value = 'Something to do ' + i;
+                newTodo.dispatchEvent(inputEvent);
+
                 var keydownEvent = document.createEvent('Event');
                 keydownEvent.initEvent('keydown', true, true);
                 keydownEvent.which = 13; // VK_ENTER
-                newTodo.value = 'Something to do ' + i;
                 newTodo.dispatchEvent(keydownEvent);
             }
         }),
